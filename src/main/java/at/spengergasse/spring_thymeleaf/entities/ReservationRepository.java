@@ -11,6 +11,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     List<Reservation> findByDeviceOrderByStartTimeAsc(Device device);
 
+    List<Reservation> findAllByOrderByStartTimeAsc();
+
     boolean existsByDeviceAndStartTimeLessThanAndEndTimeGreaterThan(
             Device device,
             LocalDateTime endTime,

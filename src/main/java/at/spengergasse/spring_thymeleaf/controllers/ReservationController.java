@@ -1,9 +1,18 @@
 package at.spengergasse.spring_thymeleaf.controllers;
 
-import at.spengergasse.spring_thymeleaf.entities.*;
+import at.spengergasse.spring_thymeleaf.entities.BodyRegion;
+import at.spengergasse.spring_thymeleaf.entities.Device;
+import at.spengergasse.spring_thymeleaf.entities.DeviceRepository;
+import at.spengergasse.spring_thymeleaf.entities.Patient;
+import at.spengergasse.spring_thymeleaf.entities.PatientRepository;
+import at.spengergasse.spring_thymeleaf.entities.Reservation;
+import at.spengergasse.spring_thymeleaf.entities.ReservationRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 
@@ -46,10 +55,10 @@ public class ReservationController {
 
         if (patient == null || device == null) {
             model.addAttribute("error", "Patient oder Gerät wurde nicht gefunden.");
+            model.addAttribute("reservation", new Reservation());
             model.addAttribute("patients", patientRepository.findAll());
             model.addAttribute("devices", deviceRepository.findAll());
             model.addAttribute("regions", BodyRegion.values());
-            model.addAttribute("reservation", new Reservation());
             return "add_reservation";
         }
 
@@ -58,10 +67,10 @@ public class ReservationController {
 
         if (!end.isAfter(start)) {
             model.addAttribute("error", "Die Endzeit muss nach der Startzeit liegen.");
+            model.addAttribute("reservation", new Reservation());
             model.addAttribute("patients", patientRepository.findAll());
             model.addAttribute("devices", deviceRepository.findAll());
             model.addAttribute("regions", BodyRegion.values());
-            model.addAttribute("reservation", new Reservation());
             return "add_reservation";
         }
 
@@ -70,10 +79,10 @@ public class ReservationController {
 
         if (conflict) {
             model.addAttribute("error", "Für dieses Gerät existiert in diesem Zeitraum bereits eine Reservierung.");
+            model.addAttribute("reservation", new Reservation());
             model.addAttribute("patients", patientRepository.findAll());
             model.addAttribute("devices", deviceRepository.findAll());
             model.addAttribute("regions", BodyRegion.values());
-            model.addAttribute("reservation", new Reservation());
             return "add_reservation";
         }
 
@@ -95,18 +104,18 @@ public class ReservationController {
         var devices = deviceRepository.findAll();
         model.addAttribute("devices", devices);
 
-        Device device = null;
-
         if (deviceId != null) {
-            device = deviceRepository.findById(deviceId).orElse(null);
-        } else if (!devices.isEmpty()) {
-            device = devices.get(0);
-        }
+            Device selectedDevice = deviceRepository.findById(deviceId).orElse(null);
+            model.addAttribute("selectedDevice", selectedDevice);
 
-        model.addAttribute("selectedDevice", device);
-
-        if (device != null) {
-            model.addAttribute("reservations", reservationRepository.findByDeviceOrderByStartTimeAsc(device));
+            if (selectedDevice != null) {
+                model.addAttribute("reservations", reservationRepository.findByDeviceOrderByStartTimeAsc(selectedDevice));
+            } else {
+                model.addAttribute("reservations", reservationRepository.findAllByOrderByStartTimeAsc());
+            }
+        } else {
+            model.addAttribute("selectedDevice", null);
+            model.addAttribute("reservations", reservationRepository.findAllByOrderByStartTimeAsc());
         }
 
         return "reservation_list";

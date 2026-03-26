@@ -9,12 +9,38 @@
 <div class="container">
     <div class="page-header">
         <h1>Reservierungsliste</h1>
-        <p>Anzeige aller bestehenden Reservierungen für das ausgewählte Untersuchungsgerät.</p>
+        <p>Anzeige aller bestehenden Reservierungen mit optionaler Filterung nach Untersuchungsgerät.</p>
     </div>
 
     <div class="content">
-        <div th:if="${selectedDevice != null}">
-            <h2 class="section-title">
+        <form th:action="@{/reservation/list}" method="get">
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label>Nach Gerät filtern</label>
+                    <select name="deviceId">
+                        <option value="">Alle Geräte anzeigen</option>
+                        <option th:each="d : ${devices}"
+                                th:value="${d.id}"
+                                th:selected="${selectedDevice != null and selectedDevice.id == d.id}"
+                                th:text="${d.designation + ' - ' + d.type + ' - Raum ' + d.roomNumber}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit">Filter anwenden</button>
+                <a class="btn-secondary" th:href="@{/reservation/list}">Filter zurücksetzen</a>
+                <a class="btn-secondary" th:href="@{/}">Zurück zur Startseite</a>
+            </div>
+        </form>
+
+        <div style="margin-top: 28px;">
+            <h2 class="section-title" th:if="${selectedDevice == null}">
+                Alle Reservierungen
+            </h2>
+
+            <h2 class="section-title" th:if="${selectedDevice != null}">
                 Reservierungen für
                 <span th:text="${selectedDevice.designation}"></span>
             </h2>
@@ -23,6 +49,7 @@
                 <table>
                     <thead>
                     <tr>
+                        <th>Gerät</th>
                         <th>Patient</th>
                         <th>Von</th>
                         <th>Bis</th>
@@ -32,6 +59,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="r : ${reservations}">
+                        <td th:text="${r.device.designation + ' (' + r.device.type + ')'}"></td>
                         <td th:text="${r.patient.lastName + ', ' + r.patient.firstName}"></td>
                         <td th:text="${#temporals.format(r.startTime, 'dd.MM.yyyy HH:mm')}"></td>
                         <td th:text="${#temporals.format(r.endTime, 'dd.MM.yyyy HH:mm')}"></td>
@@ -43,13 +71,12 @@
             </div>
 
             <div class="empty-state" th:if="${#lists.isEmpty(reservations)}">
-                Für dieses Gerät gibt es derzeit noch keine Reservierungen.
+                Es sind derzeit keine Reservierungen vorhanden.
             </div>
         </div>
 
         <div class="actions" style="margin-top: 28px;">
             <a class="btn-secondary" th:href="@{/reservation/add}">Neue Reservierung</a>
-            <a class="btn-secondary" th:href="@{/}">Zurück zur Startseite</a>
         </div>
     </div>
 </div>
