@@ -1,31 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Patients List</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Patientenliste</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 <div class="container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>name</th>
-                <th>birth</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="p : ${patients}">
-                <td th:text="${p.name}"></td>
-                <td th:text="${p.birth}"></td>
-            </tr>
-        </tbody>
+    <div class="page-header">
+        <h1>Patientenliste</h1>
+        <p>Übersicht aller registrierten Patientinnen und Patienten im System.</p>
+    </div>
 
-    </table>
+    <div class="content">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>SVNR</th>
+                    <th>Vorname</th>
+                    <th>Nachname</th>
+                    <th>Geschlecht</th>
+                    <th>Geburtsdatum</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${patients}">
+                    <td th:text="${p.id}"></td>
+                    <td><span class="badge" th:text="${p.socialSecurityNumber}"></span></td>
+                    <td th:text="${p.firstName}"></td>
+                    <td th:text="${p.lastName}"></td>
+                    <td th:text="${p.gender}"></td>
+                    <td th:text="${p.birthDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <p>
-        <a href="/patient/add">new patient</a>
-    </p>
+        <div class="top-link">
+            <a th:href="@{/}">Zurück zur Startseite</a>
+        </div>
+    </div>
 </div>
 </body>
 </html>

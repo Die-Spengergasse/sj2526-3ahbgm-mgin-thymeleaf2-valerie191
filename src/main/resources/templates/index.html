@@ -1,16 +1,46 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Greeting</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title>Radiologie-Institut</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 <div class="container">
-    <h1>Hallo</h1>
-    Datum: <span th:text="${today}"></span>
-    <div>
-        <a href="/patient/list">patient list</a>
+    <div class="page-header">
+        <h1>Radiologie-Institut</h1>
+        <p>Digitales Reservierungssystem für Patienten, Untersuchungsgeräte und Terminverwaltung.</p>
+    </div>
+
+    <div class="content">
+        <h2 class="section-title">Übersicht</h2>
+        <p class="subtle">Heute: <span th:text="${today}"></span></p>
+
+        <div class="card-grid">
+            <a class="card-link" th:href="@{/patient/add}">
+                <h3>Patient registrieren</h3>
+                <p>Neue Patientinnen und Patienten mit allen erforderlichen Stammdaten erfassen.</p>
+            </a>
+
+            <a class="card-link" th:href="@{/patient/list}">
+                <h3>Patientenliste</h3>
+                <p>Alle bereits registrierten Personen strukturiert und übersichtlich anzeigen.</p>
+            </a>
+
+            <a class="card-link" th:href="@{/reservation/add}">
+                <h3>Reservierung erfassen</h3>
+                <p>Gerät, Zeitraum, Körperregion und Kommentar für eine Untersuchung eintragen.</p>
+            </a>
+
+            <a class="card-link" th:href="@{/reservation/list}">
+                <h3>Reservierungsliste</h3>
+                <p>Reservierungen je Gerät aufrufen und bestehende Termine kontrollieren.</p>
+            </a>
+        </div>
+
+        <div class="info-strip">
+            Hinweis: Vor dem Anlegen einer Reservierung muss der Patient bereits registriert sein.
+        </div>
     </div>
 </div>
 </body>

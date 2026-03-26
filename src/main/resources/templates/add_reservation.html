@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservierung erfassen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1>Reservierung erfassen</h1>
+        <p>Termin für ein Untersuchungsgerät inklusive Zeitraum, Körperregion und Kommentar anlegen.</p>
+    </div>
+
+    <div class="content">
+        <p class="error" th:if="${error}" th:text="${error}"></p>
+
+        <form th:action="@{/reservation/add}" method="post">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Patient</label>
+                    <select name="patientId" required>
+                        <option value="">Bitte auswählen</option>
+                        <option th:each="p : ${patients}" th:value="${p.id}"
+                                th:text="${p.lastName + ', ' + p.firstName + ' (' + p.socialSecurityNumber + ')'}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Gerät</label>
+                    <select name="deviceId" required>
+                        <option value="">Bitte auswählen</option>
+                        <option th:each="d : ${devices}" th:value="${d.id}"
+                                th:text="${d.designation + ' - ' + d.type + ' - Raum ' + d.roomNumber}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Startzeit</label>
+                    <input type="datetime-local" name="startTime" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Endzeit</label>
+                    <input type="datetime-local" name="endTime" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Körperregion</label>
+                    <select name="bodyRegion" required>
+                        <option value="">Bitte auswählen</option>
+                        <option th:each="r : ${regions}" th:value="${r}" th:text="${r}"></option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Kommentar</label>
+                    <textarea name="comment" rows="5" placeholder="Zusätzliche Hinweise zur Untersuchung"></textarea>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit">Reservierung speichern</button>
+                <a class="btn-secondary" th:href="@{/}">Zurück zur Startseite</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

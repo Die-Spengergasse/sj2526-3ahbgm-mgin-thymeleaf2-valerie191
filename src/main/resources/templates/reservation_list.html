@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservierungsliste</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<div class="container">
+    <div class="page-header">
+        <h1>Reservierungsliste</h1>
+        <p>Anzeige aller bestehenden Reservierungen für das ausgewählte Untersuchungsgerät.</p>
+    </div>
+
+    <div class="content">
+        <div th:if="${selectedDevice != null}">
+            <h2 class="section-title">
+                Reservierungen für
+                <span th:text="${selectedDevice.designation}"></span>
+            </h2>
+
+            <div class="table-wrapper" th:if="${not #lists.isEmpty(reservations)}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Von</th>
+                        <th>Bis</th>
+                        <th>Körperregion</th>
+                        <th>Kommentar</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="r : ${reservations}">
+                        <td th:text="${r.patient.lastName + ', ' + r.patient.firstName}"></td>
+                        <td th:text="${#temporals.format(r.startTime, 'dd.MM.yyyy HH:mm')}"></td>
+                        <td th:text="${#temporals.format(r.endTime, 'dd.MM.yyyy HH:mm')}"></td>
+                        <td><span class="badge" th:text="${r.bodyRegion}"></span></td>
+                        <td th:text="${r.comment}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" th:if="${#lists.isEmpty(reservations)}">
+                Für dieses Gerät gibt es derzeit noch keine Reservierungen.
+            </div>
+        </div>
+
+        <div class="actions" style="margin-top: 28px;">
+            <a class="btn-secondary" th:href="@{/reservation/add}">Neue Reservierung</a>
+            <a class="btn-secondary" th:href="@{/}">Zurück zur Startseite</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
