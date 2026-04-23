@@ -19,8 +19,7 @@ public class Device {
     @Column(nullable = false)
     private String roomNumber;
 
-    @Column (nullable = false)
-    private boolean available = true;
+
 
     public Device() {
     }
