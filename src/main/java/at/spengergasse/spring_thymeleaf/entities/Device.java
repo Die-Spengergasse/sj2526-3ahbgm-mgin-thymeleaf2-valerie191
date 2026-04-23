@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 public class Device {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -17,6 +18,9 @@ public class Device {
 
     @Column(nullable = false)
     private String roomNumber;
+
+    @Column (nullable = false)
+    private boolean available = true;
 
     public Device() {
     }
