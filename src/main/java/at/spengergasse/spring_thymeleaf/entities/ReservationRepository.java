@@ -18,4 +18,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
             LocalDateTime endTime,
             LocalDateTime startTime
     );
+
+    boolean existsByPatientAndStartTimeLessThanAndEndTimeGreaterThan(
+            Patient patient,
+            LocalDateTime endTime,
+            LocalDateTime startTime
+    );
 }
