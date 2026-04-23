@@ -13,6 +13,10 @@
     </div>
 
     <div class="content">
+
+        <!-- FEHLERMELDUNG -->
+        <p class="error" th:if="${error}" th:text="${error}"></p>
+
         <form th:action="@{/reservation/list}" method="get">
             <div class="form-grid">
                 <div class="form-group full-width">
